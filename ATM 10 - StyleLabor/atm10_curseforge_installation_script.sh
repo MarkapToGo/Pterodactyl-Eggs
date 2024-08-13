@@ -196,9 +196,16 @@ function download_extra_mods {
     mkdir -p "${MODS_DIR}"
 
     local NEOFORWARDING_URL="https://cdn.modrinth.com/data/Vbdanw1l/versions/9TaVuVhn/neoforwarding-1.0.0-1.21-NeoForge.jar"
+    local WorldEdit_URL="https://cdn.modrinth.com/data/1u6JkXh5/versions/vBzkrSYP/worldedit-mod-7.3.6.jar"
 
     echo "Downloading NeoForwarding mod..."
     if ! wget -q -O "${MODS_DIR}/neoforwarding-1.0.0-1.21-NeoForge.jar" "${NEOFORWARDING_URL}"; then
+        echo "Failed to download NeoForwarding mod."
+        exit 1
+    fi
+
+    echo "Downloading WorldEdit mod..."
+    if ! wget -q -O "${MODS_DIR}/worldedit-mod-7.3.6.jar" "${WorldEdit_URL}"; then
         echo "Failed to download NeoForwarding mod."
         exit 1
     fi
