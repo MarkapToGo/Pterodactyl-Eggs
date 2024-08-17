@@ -197,7 +197,7 @@ function download_extra_mods {
 
     local NEOFORWARDING_URL="https://cdn.modrinth.com/data/Vbdanw1l/versions/9TaVuVhn/neoforwarding-1.0.0-1.21-NeoForge.jar"
     local WorldEdit_URL="https://cdn.modrinth.com/data/1u6JkXh5/versions/vBzkrSYP/worldedit-mod-7.3.6.jar"
-
+    local LOGBEGONE_URL="https://cdn.modrinth.com/data/9ON3zv6e/versions/1CpHwmQd/logbegone-neo-1.21-1.0.2.jar"
     echo "Downloading NeoForwarding mod..."
     if ! wget -q -O "${MODS_DIR}/neoforwarding-1.0.0-1.21-NeoForge.jar" "${NEOFORWARDING_URL}"; then
         echo "Failed to download NeoForwarding mod."
@@ -206,7 +206,13 @@ function download_extra_mods {
 
     echo "Downloading WorldEdit mod..."
     if ! wget -q -O "${MODS_DIR}/worldedit-mod-7.3.6.jar" "${WorldEdit_URL}"; then
-        echo "Failed to download NeoForwarding mod."
+        echo "Failed to download World Edit mod."
+        exit 1
+    fi
+
+    echo "Downloading Log Begone mod..."
+    if ! wget -q -O "${MODS_DIR}/logbegone-neo-1.21-1.0.2.jar" "${LOGBEGONE_URL}"; then
+        echo "Failed to download Log Begone mod."
         exit 1
     fi
 
