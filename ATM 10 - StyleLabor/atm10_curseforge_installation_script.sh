@@ -281,6 +281,143 @@ function unpack_zip {
     rm -rf server.zip
 }
 
+function add_stylelabor_file {
+    local CONFIG_DIR="${SERVER_DIR}/config/ftbquests/quests"
+    local FILE_PATH="${CONFIG_DIR}/stylelabor.snbt"
+
+    echo "Adding stylelabor.snbt file..."
+
+    mkdir -p "${CONFIG_DIR}"
+
+    cat > "${FILE_PATH}" <<EOL
+{
+    default_hide_dependency_lines: false
+    default_quest_shape: ""
+    filename: "stylelabor"
+    group: ""
+    icon: {
+        id: "minecraft:observer"
+    }
+    id: "7327DDFA32F13FDE"
+    order_index: 3
+    quest_links: [ ]
+    quests: [
+        {
+            icon: {
+                id: "mekanism:brine_bucket"
+            }
+            id: "7863395A0E5C7B3F"
+            rewards: [{
+                id: "2A0B8043D4499DDD"
+                item: {
+                    components: {
+                        "mekanism:fluids": {
+                            fluid_tanks: [{
+                                amount: 2147483647
+                                id: "mekanism:brine"
+                            }]
+                        }
+                    }
+                    count: 1
+                    id: "mekanism:creative_fluid_tank"
+                }
+                type: "item"
+            }]
+            tasks: [
+                {
+                    consume_items: true
+                    count: 20000L
+                    id: "1F14FF6BCED502A7"
+                    item: { count: 1, id: "mekanism:thermal_evaporation_block" }
+                    type: "item"
+                }
+                {
+                    consume_items: true
+                    count: 5000L
+                    id: "5405DCFB5603A776"
+                    item: { count: 1, id: "mekanism:thermal_evaporation_controller" }
+                    type: "item"
+                }
+                {
+                    consume_items: true
+                    count: 1000L
+                    id: "24E7A5E998F56186"
+                    item: { count: 1, id: "mekanism:ultimate_mechanical_pipe" }
+                    type: "item"
+                }
+                {
+                    consume_items: true
+                    count: 512L
+                    id: "5397B6176040FCAC"
+                    item: { count: 1, id: "mekanism:ultimate_fluid_tank" }
+                    type: "item"
+                }
+            ]
+            x: -0.5d
+            y: 0.0d
+        }
+        {
+            icon: {
+                id: "mekanism:lithium_bucket"
+            }
+            id: "386D5A7E39587927"
+            rewards: [{
+                id: "0C12E1A72E494AEE"
+                item: {
+                    components: {
+                        "mekanism:fluids": {
+                            fluid_tanks: [{
+                                amount: 2147483647
+                                id: "mekanism:lithium"
+                            }]
+                        }
+                    }
+                    count: 1
+                    id: "mekanism:creative_fluid_tank"
+                }
+                type: "item"
+            }]
+            tasks: [
+                {
+                    consume_items: true
+                    count: 20000L
+                    id: "3D5DAAEAF0D2ED22"
+                    item: { count: 1, id: "mekanism:thermal_evaporation_block" }
+                    type: "item"
+                }
+                {
+                    consume_items: true
+                    count: 5000L
+                    id: "238D6C598F836D0E"
+                    item: { count: 1, id: "mekanism:thermal_evaporation_controller" }
+                    type: "item"
+                }
+                {
+                    consume_items: true
+                    count: 1000L
+                    id: "15A9E00E7F7E8015"
+                    item: { count: 1, id: "mekanism:ultimate_mechanical_pipe" }
+                    type: "item"
+                }
+                {
+                    consume_items: true
+                    count: 512L
+                    id: "7568A2F32C966835"
+                    item: { count: 1, id: "mekanism:ultimate_fluid_tank" }
+                    type: "item"
+                }
+            ]
+            x: 0.5d
+            y: 0.0d
+        }
+    ]
+}
+EOL
+
+    echo "stylelabor.snbt file added successfully."
+}
+
+
 function json_download_mods {
     echo "Downloading mods..."
 
@@ -595,5 +732,6 @@ if [[ -f "${SERVER_DIR}/client.manifest.json" ]]; then
 fi
 
 download_extra_mods
+add_stylelabor_file
 
 echo -e "\nInstall completed successfully, enjoy!"
