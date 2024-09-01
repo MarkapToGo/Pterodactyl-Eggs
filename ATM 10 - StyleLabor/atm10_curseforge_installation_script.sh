@@ -282,7 +282,7 @@ function unpack_zip {
 }
 
 function add_stylelabor_file {
-    local CONFIG_DIR="${SERVER_DIR}/config/ftbquests/quests"
+    local CONFIG_DIR="${SERVER_DIR}/config/ftbquests/quests/chapters"
     local FILE_PATH="${CONFIG_DIR}/stylelabor.snbt"
 
     echo "Adding stylelabor.snbt file..."
@@ -291,127 +291,231 @@ function add_stylelabor_file {
 
     cat > "${FILE_PATH}" <<EOL
 {
-    default_hide_dependency_lines: false
-    default_quest_shape: ""
-    filename: "stylelabor"
-    group: ""
-    icon: {
-        id: "minecraft:observer"
-    }
-    id: "7327DDFA32F13FDE"
-    order_index: 3
-    quest_links: [ ]
-    quests: [
-        {
-            icon: {
-                id: "mekanism:brine_bucket"
-            }
-            id: "7863395A0E5C7B3F"
-            rewards: [{
-                id: "2A0B8043D4499DDD"
-                item: {
-                    components: {
-                        "mekanism:fluids": {
-                            fluid_tanks: [{
-                                amount: 2147483647
-                                id: "mekanism:brine"
-                            }]
-                        }
-                    }
-                    count: 1
-                    id: "mekanism:creative_fluid_tank"
-                }
-                type: "item"
-            }]
-            tasks: [
-                {
-                    consume_items: true
-                    count: 20000L
-                    id: "1F14FF6BCED502A7"
-                    item: { count: 1, id: "mekanism:thermal_evaporation_block" }
-                    type: "item"
-                }
-                {
-                    consume_items: true
-                    count: 5000L
-                    id: "5405DCFB5603A776"
-                    item: { count: 1, id: "mekanism:thermal_evaporation_controller" }
-                    type: "item"
-                }
-                {
-                    consume_items: true
-                    count: 1000L
-                    id: "24E7A5E998F56186"
-                    item: { count: 1, id: "mekanism:ultimate_mechanical_pipe" }
-                    type: "item"
-                }
-                {
-                    consume_items: true
-                    count: 512L
-                    id: "5397B6176040FCAC"
-                    item: { count: 1, id: "mekanism:ultimate_fluid_tank" }
-                    type: "item"
-                }
-            ]
-            x: -0.5d
-            y: 0.0d
-        }
-        {
-            icon: {
-                id: "mekanism:lithium_bucket"
-            }
-            id: "386D5A7E39587927"
-            rewards: [{
-                id: "0C12E1A72E494AEE"
-                item: {
-                    components: {
-                        "mekanism:fluids": {
-                            fluid_tanks: [{
-                                amount: 2147483647
-                                id: "mekanism:lithium"
-                            }]
-                        }
-                    }
-                    count: 1
-                    id: "mekanism:creative_fluid_tank"
-                }
-                type: "item"
-            }]
-            tasks: [
-                {
-                    consume_items: true
-                    count: 20000L
-                    id: "3D5DAAEAF0D2ED22"
-                    item: { count: 1, id: "mekanism:thermal_evaporation_block" }
-                    type: "item"
-                }
-                {
-                    consume_items: true
-                    count: 5000L
-                    id: "238D6C598F836D0E"
-                    item: { count: 1, id: "mekanism:thermal_evaporation_controller" }
-                    type: "item"
-                }
-                {
-                    consume_items: true
-                    count: 1000L
-                    id: "15A9E00E7F7E8015"
-                    item: { count: 1, id: "mekanism:ultimate_mechanical_pipe" }
-                    type: "item"
-                }
-                {
-                    consume_items: true
-                    count: 512L
-                    id: "7568A2F32C966835"
-                    item: { count: 1, id: "mekanism:ultimate_fluid_tank" }
-                    type: "item"
-                }
-            ]
-            x: 0.5d
-            y: 0.0d
-        }
-    ]
+	default_hide_dependency_lines: false
+	default_quest_shape: "rsquare"
+	filename: "stylelabor"
+	group: ""
+	icon: {
+		components: {
+			"productivebees:gene_group": {
+				attribute: "productivity"
+				purity: 100
+				value: "productivity.medium"
+			}
+		}
+		id: "productivebees:gene"
+	}
+	id: "7327DDFA32F13FDE"
+	images: [
+		{
+			height: 2.0d
+			image: "modern_industrialization:block/bronze_tank"
+			rotation: 0.0d
+			width: 2.0d
+			x: -0.5d
+			y: -1.5d
+		}
+		{
+			height: 1.0d
+			image: "modern_industrialization:item/high_pressure_water_bucket"
+			rotation: -15.0d
+			width: 1.0d
+			x: -0.75d
+			y: -1.5d
+		}
+		{
+			height: 1.0d
+			image: "the_bumblezone:item/honey_bucket"
+			rotation: 0.0d
+			width: 1.0d
+			x: -0.5d
+			y: -1.5d
+		}
+		{
+			height: 1.0d
+			image: "undergarden:item/virulent_mix_bucket"
+			order: -1
+			rotation: 15.0d
+			width: 1.0d
+			x: -0.3d
+			y: -1.5d
+		}
+	]
+	order_index: 3
+	quest_links: [ ]
+	quests: [
+		{
+			icon: {
+				id: "mekanism:brine_bucket"
+			}
+			id: "7863395A0E5C7B3F"
+			rewards: [{
+				id: "2A0B8043D4499DDD"
+				item: {
+					components: {
+						"mekanism:fluids": {
+							fluid_tanks: [{
+								amount: 2147483647
+								id: "mekanism:brine"
+							}]
+						}
+					}
+					count: 1
+					id: "mekanism:creative_fluid_tank"
+				}
+				type: "item"
+			}]
+			tasks: [
+				{
+					consume_items: true
+					count: 20000L
+					id: "1F14FF6BCED502A7"
+					item: { count: 1, id: "mekanism:thermal_evaporation_block" }
+					type: "item"
+				}
+				{
+					consume_items: true
+					count: 5000L
+					id: "5405DCFB5603A776"
+					item: { count: 1, id: "mekanism:thermal_evaporation_controller" }
+					type: "item"
+				}
+				{
+					consume_items: true
+					count: 1000L
+					id: "24E7A5E998F56186"
+					item: { count: 1, id: "mekanism:ultimate_mechanical_pipe" }
+					type: "item"
+				}
+				{
+					consume_items: true
+					count: 512L
+					id: "5397B6176040FCAC"
+					item: { count: 1, id: "mekanism:ultimate_fluid_tank" }
+					type: "item"
+				}
+			]
+			x: -1.5d
+			y: 0.0d
+		}
+		{
+			icon: {
+				id: "mekanism:lithium_bucket"
+			}
+			id: "386D5A7E39587927"
+			rewards: [{
+				id: "0C12E1A72E494AEE"
+				item: {
+					components: {
+						"mekanism:fluids": {
+							fluid_tanks: [{
+								amount: 2147483647
+								id: "mekanism:lithium"
+							}]
+						}
+					}
+					count: 1
+					id: "mekanism:creative_fluid_tank"
+				}
+				type: "item"
+			}]
+			tasks: [
+				{
+					consume_items: true
+					count: 20000L
+					id: "3D5DAAEAF0D2ED22"
+					item: { count: 1, id: "mekanism:thermal_evaporation_block" }
+					type: "item"
+				}
+				{
+					consume_items: true
+					count: 5000L
+					id: "238D6C598F836D0E"
+					item: { count: 1, id: "mekanism:thermal_evaporation_controller" }
+					type: "item"
+				}
+				{
+					consume_items: true
+					count: 1000L
+					id: "15A9E00E7F7E8015"
+					item: { count: 1, id: "mekanism:ultimate_mechanical_pipe" }
+					type: "item"
+				}
+				{
+					consume_items: true
+					count: 512L
+					id: "7568A2F32C966835"
+					item: { count: 1, id: "mekanism:ultimate_fluid_tank" }
+					type: "item"
+				}
+			]
+			x: 0.5d
+			y: 0.0d
+		}
+		{
+			icon: {
+				id: "mekanism:heavy_water_bucket"
+			}
+			id: "18D10D694533DEBF"
+			rewards: [{
+				id: "726DB0B92565CD5A"
+				item: {
+					components: {
+						"mekanism:fluids": {
+							fluid_tanks: [{
+								amount: 2147483647
+								id: "mekanism:heavy_water"
+							}]
+						}
+					}
+					count: 1
+					id: "mekanism:creative_fluid_tank"
+				}
+				type: "item"
+			}]
+			tasks: [
+				{
+					consume_items: true
+					count: 10000L
+					id: "30B7FEBA6A3F1308"
+					item: { count: 1, id: "mekanism:ultimate_mechanical_pipe" }
+					type: "item"
+				}
+				{
+					consume_items: true
+					count: 25000L
+					id: "5C55EE06104C4BC8"
+					item: { count: 1, id: "mekanism:electric_pump" }
+					type: "item"
+				}
+				{
+					consume_items: true
+					count: 5000L
+					id: "5A9DC1F63A493011"
+					item: { count: 1, id: "minecraft:bucket" }
+					type: "item"
+				}
+				{
+					consume_items: true
+					count: 1024L
+					id: "2F858DD41A566E30"
+					item: { count: 1, id: "mekanism:ultimate_fluid_tank" }
+					type: "item"
+				}
+				{
+					consume_items: true
+					count: 1024L
+					id: "418C33EA2927DE19"
+					item: { count: 1, id: "minecraft:water_bucket" }
+					type: "item"
+				}
+			]
+			x: -0.5d
+			y: 0.0d
+		}
+	]
 }
+
 EOL
 
     echo "stylelabor.snbt file added successfully."
