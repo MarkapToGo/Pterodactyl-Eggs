@@ -579,7 +579,6 @@ function add_stylelabor_file {
 	]
 }
 
-
 EOL
 
     echo "stylelabor.snbt file added successfully."
