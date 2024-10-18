@@ -196,7 +196,7 @@ function download_extra_mods {
     local MODS_DIR="${SERVER_DIR}/mods"
     mkdir -p "${MODS_DIR}"
 
-    local NEOFORWARDING_URL="https://cdn.modrinth.com/data/Vbdanw1l/versions/9TaVuVhn/neoforwarding-1.0.0-1.21-NeoForge.jar"
+    local NEOFORWARDING_URL="https://cdn.modrinth.com/data/Vbdanw1l/versions/6dFFiwAQ/neoforwarding-1.2.0-1.21.X-NeoForge.jar"
     local WorldEdit_URL="https://cdn.modrinth.com/data/1u6JkXh5/versions/vBzkrSYP/worldedit-mod-7.3.6.jar"
 
     echo "Downloading NeoForwarding mod..."
@@ -385,6 +385,31 @@ function json_download_neoforge {
     echo "Installation process is completed!"
 }
 
+function create_stylelabor_js {
+    local script_dir="${SERVER_DIR}/kubejs/server_scripts/StyleLabor"
+    local script_file="${script_dir}/stylelabor.js"
+
+    # Ensure the directory exists
+    mkdir -p "$script_dir"
+
+    # Create the stylelabor.js file
+    echo "Creating stylelabor.js..."
+    cat <<EOF > "$script_file"
+ServerEvents.recipes((e) => {
+  let makeID = (type, output, input) => {
+    return _makeID('mekanism', type, output, input);
+  };
+
+  let metallurgic_infusing = (output, input, chem, perTick) => {
+    e.recipes.mekanism.metallurgic_infusing(output, input, chem, perTick ? perTick : false).id(makeID('metallurgic_infusing', output, input));
+  };
+
+  // StyleLabor Uraninite Recipe
+  metallurgic_infusing('powah:uraninite_raw', 'modern_industrialization:uranium_ingot', '40x mekanism:diamond');
+});
+EOF
+    echo "stylelabor.js created successfully."
+}
 
 function clean_mods_folder {
     local MODS_DIR="${SERVER_DIR}/mods"
@@ -444,5 +469,8 @@ download_extra_mods
 
 # Create neoforwarding-server.toml
 create_neoforwarding_config
+
+# Create stylelabor.js
+create_stylelabor_js
 
 echo -e "\nInstall completed successfully, enjoy!"

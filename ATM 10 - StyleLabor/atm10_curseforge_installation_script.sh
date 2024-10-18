@@ -195,7 +195,7 @@ function download_extra_mods {
     local MODS_DIR="${SERVER_DIR}/mods"
     mkdir -p "${MODS_DIR}"
 
-    local NEOFORWARDING_URL="https://cdn.modrinth.com/data/Vbdanw1l/versions/9TaVuVhn/neoforwarding-1.0.0-1.21-NeoForge.jar"
+    local NEOFORWARDING_URL="https://cdn.modrinth.com/data/Vbdanw1l/versions/6dFFiwAQ/neoforwarding-1.2.0-1.21.X-NeoForge.jar"
     local WorldEdit_URL="https://cdn.modrinth.com/data/1u6JkXh5/versions/vBzkrSYP/worldedit-mod-7.3.6.jar"
     local LOGBEGONE_URL="https://cdn.modrinth.com/data/9ON3zv6e/versions/1CpHwmQd/logbegone-neo-1.21-1.0.2.jar"
 
