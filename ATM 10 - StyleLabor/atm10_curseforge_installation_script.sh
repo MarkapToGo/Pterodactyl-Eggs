@@ -199,6 +199,10 @@ function download_extra_mods {
     local WorldEdit_URL="https://cdn.modrinth.com/data/1u6JkXh5/versions/vBzkrSYP/worldedit-mod-7.3.6.jar"
     local LOGBEGONE_URL="https://cdn.modrinth.com/data/9ON3zv6e/versions/1CpHwmQd/logbegone-neo-1.21-1.0.2.jar"
 
+    local DYNVIEW_URL="https://www.curseforge.com/api/v1/mods/366140/files/5570957/download"
+    local Chunksending_URL="https://www.curseforge.com/api/v1/mods/831663/files/5540768/download"
+    local BetterChunks_URL="https://www.curseforge.com/api/v1/mods/899487/files/5747092/download"
+
     echo "Downloading NeoForwarding mod..."
     if ! wget -q -O "${MODS_DIR}/neoforwarding-1.0.0-1.21-NeoForge.jar" "${NEOFORWARDING_URL}"; then
         echo "Failed to download NeoForwarding mod."
@@ -217,9 +221,24 @@ function download_extra_mods {
         exit 1
     fi
 
-    echo "Extra mods downloaded successfully."
-}
+    echo "[PERFORMANCE MOD] Downloading Dynview mod..."
+    if ! wget -q -O "${MODS_DIR}/dynview.jar" "${DYNVIEW_URL}"; then
+        echo "Failed to download Dynview mod."
+        exit 1
+    fi
 
+    echo "[PERFORMANCE MOD] Downloading Chunksending mod..."
+    if ! wget -q -O "${MODS_DIR}/chunksending.jar" "${Chunksending_URL}"; then
+        echo "Failed to download Chunksending mod."
+        exit 1
+    fi
+
+    echo "[PERFORMANCE MOD] Downloading BetterChunks mod..."
+    if ! wget -q -O "${MODS_DIR}/betterchunks.jar" "${BetterChunks_URL}"; then
+        echo "Failed to download BetterChunks mod."
+        exit 1
+    fi
+}
 function unzip-strip() (
     set -u
 
