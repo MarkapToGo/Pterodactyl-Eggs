@@ -404,6 +404,9 @@ ServerEvents.recipes((e) => {
     e.recipes.mekanism.metallurgic_infusing(output, input, chem, perTick ? perTick : false).id(makeID('metallurgic_infusing', output, input));
   };
 
+  // StyleLabor ae2:sky_stone_block
+  metallurgic_infusing('ae2:sky_stone_block', 'minecraft:deepslate', '40x mekanism:diamond');
+
   // StyleLabor Uraninite Recipe
   metallurgic_infusing('powah:uraninite_raw', 'modern_industrialization:uranium_ingot', '40x mekanism:diamond');
 });
