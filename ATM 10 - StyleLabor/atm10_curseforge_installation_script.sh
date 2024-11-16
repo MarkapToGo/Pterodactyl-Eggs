@@ -300,6 +300,30 @@ function unpack_zip {
     rm -rf server.zip
 }
 
+function create_stylelabor_js {
+    local script_dir="${SERVER_DIR}/kubejs/server_scripts/StyleLabor"
+    local script_file="${script_dir}/stylelabor.js"
+
+
+    # Ensure the directory exists
+    mkdir -p "$script_dir"
+
+
+    # Create the stylelabor.js file
+    echo "Creating stylelabor.js..."
+    cat <<EOF > "$script_file"
+// priority: 100
+
+ServerEvents.recipes((e) => {
+	e.remove({ output: 'industrialforegoing:infinity_nuke' });
+e.remove({ output: 'industrialforegoing:infinity_nuke' });
+});
+
+EOF
+    echo "stylelabor.js created successfully."
+}
+
+
 function add_stylelabor_file {
     local CONFIG_DIR="${SERVER_DIR}/config/ftbquests/quests/chapters"
     local FILE_PATH="${CONFIG_DIR}/stylelabor.snbt"
@@ -919,5 +943,8 @@ fi
 
 download_extra_mods
 add_stylelabor_file
+
+# Create stylelabor.js
+create_stylelabor_js
 
 echo -e "\nInstall completed successfully, enjoy!"
