@@ -7,6 +7,9 @@ if [ ! -d /mnt/server ]; then
 fi
 cd /mnt/server
 
+# Record the start time
+start_time=$(date +%s)
+
 # Download needed software.
 function install_required {
     apt update
@@ -109,4 +112,21 @@ install_specified_forge_version
 move_startup_files
 installer_cleanup
 
-echo "Finished installing FTB modpack"
+# Record the end time
+end_time=$(date +%s)
+duration=$((end_time - start_time))
+
+# Display modpack and NeoForge details
+echo "########################################"
+echo "##                                    ##"
+echo "##  Finished installing FTB modpack   ##"
+echo "##            StyleLabor☄️            ##"
+echo "##                                    ##"
+echo "########################################"
+echo ""
+echo "✨ Modpack ID: ${FTB_MODPACK_ID}"
+echo "🐻 Modpack Version ID: ${FTB_MODPACK_VERSION_ID}"
+if [[ -n "${SPECIFIED_FORGE_VERSION}" ]]; then
+    echo "🍄 NeoForge Version: ${SPECIFIED_FORGE_VERSION}"
+fi
+echo "💻 Installation took ${duration} seconds."
