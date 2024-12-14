@@ -39,12 +39,20 @@ function get_modpack_id {
 
 function run_installer {
     # get architecture for installer
-    INSTALLER_TYPE=$([ "$(uname -m)" == "x86_64" ] && echo "linux" || echo "arm/linux")
-    echo "ModpackID: ${FTB_MODPACK_ID} VersionID: ${FTB_MODPACK_VERSION_ID} InstallerType: ${INSTALLER_TYPE}"
+    INSTALLER_TYPE=$([ "$(uname -m)" == "x86_64" ] || [ "$(uname -m)" == "x86" ] && echo "linux" || echo "arm/linux")
+    echo "ModpackID: ${FTB_MODPACK_ID} VersionString: ${FTB_VERSION_STRING} InstallerType: ${INSTALLER_TYPE}"
 
-    # download installer
-    curl -L https://api.modpacks.ch/public/modpack/0/0/server/${INSTALLER_TYPE} --output serversetup
-    chmod +x ./serversetup
+    # download installer and rename to serverinstall_${FTB_MODPACK_ID}_${FTB_VERSION_STRING}
+    curl -L https://api.feed-the-beast.com/v1/modpacks/public/modpack/${FTB_MODPACK_ID}/${FTB_VERSION_STRING}/server/${INSTALLER_TYPE} --output serverinstall_${FTB_MODPACK_ID}_${FTB_VERSION_STRING}
+
+    # check if the download was successful
+    if grep -q "<title>Error</title>" serverinstall_${FTB_MODPACK_ID}_${FTB_VERSION_STRING}; then
+        echo "Error: Failed to download the installer. Please check the URL and try again."
+        cat serverinstall_${FTB_MODPACK_ID}_${FTB_VERSION_STRING}
+        exit 1
+    fi
+
+    chmod +x serverinstall_${FTB_MODPACK_ID}_${FTB_VERSION_STRING}
 
     # remove old forge files (to allow updating)
     rm -rf libraries/net/minecraftforge/forge
@@ -52,7 +60,7 @@ function run_installer {
     rm -f unix_args.txt
 
     # run installer
-    ./serversetup ${FTB_MODPACK_ID} ${FTB_MODPACK_VERSION_ID} --auto --noscript --nojava
+    ./serverinstall_${FTB_MODPACK_ID}_${FTB_VERSION_STRING} --auto
 }
 
 function install_specified_forge_version {
@@ -102,6 +110,10 @@ function installer_cleanup {
     rm -f run.bat
     rm -f run.sh
     rm -f neoforge-installer.jar.log
+    rm -f ftb-server-installer.log
+    rm -f user_jvm_args.txt
+    rm -f serverinstall_${FTB_MODPACK_ID}_${FTB_VERSION_STRING}
+    rm -f neoforge-${SPECIFIED_FORGE_VERSION}-installer.jar.log
 }
 
 # run installation steps
