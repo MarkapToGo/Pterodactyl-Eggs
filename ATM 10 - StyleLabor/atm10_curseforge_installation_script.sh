@@ -333,6 +333,7 @@ function add_stylelabor_file {
     mkdir -p "${CONFIG_DIR}"
 
     cat > "${FILE_PATH}" <<EOL
+
 {
 	default_hide_dependency_lines: false
 	default_quest_shape: "rsquare"
@@ -383,32 +384,8 @@ function add_stylelabor_file {
 			x: -0.3d
 			y: -1.5d
 		}
-		{
-			height: 1.0d
-			image: "minecraft:textures/entity_icon/wandering_trader.png"
-			rotation: 0.0d
-			width: 1.0d
-			x: 3.0d
-			y: -1.5d
-		}
-		{
-			height: 2.0d
-			image: "modern_industrialization:block/aluminum_tank"
-			rotation: 0.0d
-			width: 2.0d
-			x: 3.0d
-			y: -1.5d
-		}
-		{
-			height: 1.0d
-			image: "integrateddynamics:aspect/write/double/effect/particle"
-			rotation: 0.0d
-			width: 1.0d
-			x: 3.5d
-			y: -2.0d
-		}
 	]
-	order_index: 3
+	order_index: 0
 	quest_links: [ ]
 	quests: [
 		{
@@ -580,47 +557,9 @@ function add_stylelabor_file {
 			x: -0.5d
 			y: 0.0d
 		}
-		{
-			can_repeat: true
-			icon: {
-				id: "alltheores:raw_uranium"
-			}
-			id: "46F86E4EE855C4B9"
-			rewards: [{
-				id: "443162A668E66637"
-				item: {
-					count: 1
-					id: "mysticalagriculture:uranium_seeds"
-				}
-				type: "item"
-			}]
-			tasks: [
-				{
-					consume_items: true
-					count: 4L
-					id: "7FD0DAE819403822"
-					item: { count: 1, id: "alltheores:uranium_block" }
-					type: "item"
-				}
-				{
-					consume_items: true
-					count: 4L
-					id: "4440B42307068A00"
-					item: { count: 4, id: "mysticalagriculture:imperium_block" }
-					type: "item"
-				}
-				{
-					consume_items: true
-					id: "7462C0B908D3B1AD"
-					item: { count: 1, id: "mysticalagriculture:prosperity_seed_base" }
-					type: "item"
-				}
-			]
-			x: 3.0d
-			y: 0.0d
-		}
 	]
 }
+
 
 EOL
 
