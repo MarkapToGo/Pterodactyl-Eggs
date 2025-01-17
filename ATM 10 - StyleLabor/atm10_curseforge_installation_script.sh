@@ -319,6 +319,11 @@ ServerEvents.recipes((e) => {
 e.remove({ output: 'industrialforegoing:infinity_nuke' });
 });
 
+ServerEvents.recipes((e) => {
+	e.remove({ output: 'mekanism:dimensional_stabilizer' });
+e.remove({ output: 'mekanism:dimensional_stabilizer' });
+});
+
 EOF
     echo "stylelabor.js created successfully."
 }
