@@ -195,7 +195,7 @@ function download_extra_mods {
     local MODS_DIR="${SERVER_DIR}/mods"
     mkdir -p "${MODS_DIR}"
 
-    local NEOFORWARDING_URL="https://cdn.modrinth.com/data/Vbdanw1l/versions/tdpr4TRc/neoforwarding-1.3.0-1.21.X-NeoForge.jar"
+    local NeoVelocity_URL="https://cdn.modrinth.com/data/RT18TcxA/versions/fMMrBXPc/neovelocity-neoforge-1.2.4.jar"
     local WorldEdit_URL="https://cdn.modrinth.com/data/1u6JkXh5/versions/vBzkrSYP/worldedit-mod-7.3.6.jar"
     local LOGBEGONE_URL="https://cdn.modrinth.com/data/9ON3zv6e/versions/1CpHwmQd/logbegone-neo-1.21-1.0.2.jar"
 
@@ -203,9 +203,9 @@ function download_extra_mods {
     local Chunksending_URL="https://www.curseforge.com/api/v1/mods/831663/files/5540768/download"
     local BetterChunks_URL="https://www.curseforge.com/api/v1/mods/899487/files/5747092/download"
 
-    echo "Downloading NeoForwarding mod..."
-    if ! wget -q -O "${MODS_DIR}/neoforwarding-1.0.0-1.21-NeoForge.jar" "${NEOFORWARDING_URL}"; then
-        echo "Failed to download NeoForwarding mod."
+    echo "Downloading NeoVelocity mod..."
+    if ! wget -q -O "${MODS_DIR}/neovelocity-neoforge-1.2.4.jar" "${NeoVelocity_URL}"; then
+        echo "Failed to download NeoVelocity mod."
         exit 1
     fi
 
