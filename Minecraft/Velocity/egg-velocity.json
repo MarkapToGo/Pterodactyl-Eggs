@@ -1,0 +1,121 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2026-08-30T11:30:00+02:00",
+    "name": "Velocity",
+    "author": "parker@parkervcp.com",
+    "description": "Velocity is a Minecraft server proxy with unparalleled server support, scalability, and flexibility.",
+    "features": [
+        "eula",
+        "java_version",
+        "pid_limit"
+    ],
+    "docker_images": {
+        "Java 25": "ghcr.io/pterodactyl/yolks:java_25",
+        "Java 21": "ghcr.io/pterodactyl/yolks:java_21",
+        "Java 17": "ghcr.io/pterodactyl/yolks:java_17",
+        "Java 16": "ghcr.io/pterodactyl/yolks:java_16",
+        "Java 11": "ghcr.io/pterodactyl/yolks:java_11",
+        "Java 8": "ghcr.io/pterodactyl/yolks:java_8"
+    },
+    "file_denylist": [],
+    "startup": "java -Xms128M -Xmx{{SERVER_MEMORY}}M -XX:+UseG1GC -XX:G1HeapRegionSize=4M -XX:+UnlockExperimentalVMOptions -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch -XX:MaxInlineLevel=15 $([ \"{{ENHANCED_FLAGS}}\" = \"1\" ] || [ \"{{ENHANCED_FLAGS}}\" = \"true\" ] && printf %s \"-Dvelocity.max-known-packs={{MAX_KNOWN_PACKS}} -Dvelocity.packet-decode-logging={{PACKET_DECODE_LOGGING}} \"){{EXTRA_FLAGS}} -jar {{SERVER_JARFILE}}",
+    "config": {
+        "files": "{\r\n    \"velocity.toml\": {\r\n        \"parser\": \"file\",\r\n        \"find\": {\r\n            \"bind = \": \"bind = \\\"0.0.0.0:{{server.build.default.port}}\\\"\"\r\n        }\r\n    }\r\n}",
+        "startup": "{\r\n    \"done\": \"Done (\"\r\n}",
+        "logs": "{}",
+        "stop": "end"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!/bin/ash\n# Velocity Proxy Installation Script\n#\n# Server Files: /mnt/server\n\nPROJECT=\"velocity\"\nUSER_AGENT=\"pterodactyl-installer/1.0 (pterodactyl.io)\"\nAPI_BASE=\"https://fill.papermc.io/v3/projects/${PROJECT}\"\n\n# Ensure required packages exist\nif ! command -v curl >/dev/null 2>&1 || ! command -v jq >/dev/null 2>&1; then\n    apk add --no-cache curl jq\nfi\n\n: \"${SERVER_DIR:=/mnt/server}\"\n: \"${VELOCITY_VERSION:=latest}\"\n: \"${BUILD_NUMBER:=latest}\"\n: \"${SERVER_JARFILE:=velocity.jar}\"\n\ncd \"${SERVER_DIR}\" || exit 1\n\nif [ -n \"${DL_PATH}\" ]; then\n    echo -e \"Using supplied download url: ${DL_PATH}\"\n    DOWNLOAD_URL=$(eval echo $(echo \"${DL_PATH}\" | sed -e 's/{{\\/${/g' -e 's/}}/}/g'))\nelse\n    TMP_DIR=$(mktemp -d)\n    trap 'rm -rf \"${TMP_DIR}\"' EXIT\n\n    echo -e \"Fetching version list for ${PROJECT}...\"\n    if ! curl -sSL -H \"User-Agent: ${USER_AGENT}\" \"${API_BASE}\" -o \"${TMP_DIR}/project.json\"; then\n        echo -e \"ERROR: Failed to connect to PaperMC API (${API_BASE})\"\n        exit 1\n    fi\n\n    if [ ! -s \"${TMP_DIR}/project.json\" ] || jq -e '.ok == false' \"${TMP_DIR}/project.json\" >/dev/null 2>&1; then\n        echo -e \"ERROR: Failed to fetch valid project metadata for ${PROJECT}\"\n        exit 1\n    fi\n\n    LATEST_VERSION=$(jq -r '.versions | to_entries | map(.value) | flatten | .[0] // empty' \"${TMP_DIR}/project.json\")\n\n    if [ -z \"${VELOCITY_VERSION}\" ] || [ \"${VELOCITY_VERSION}\" = \"latest\" ]; then\n        RESOLVED_VERSION=\"${LATEST_VERSION}\"\n        echo -e \"Using latest ${PROJECT} version: ${RESOLVED_VERSION}\"\n    else\n        MATCHED_VERSION=$(jq -r --arg V \"${VELOCITY_VERSION}\" '.versions | to_entries | map(.value) | flatten | map(select(. == $V or (. | contains($V)))) | .[0] // empty' \"${TMP_DIR}/project.json\")\n        if [ -n \"${MATCHED_VERSION}\" ]; then\n            RESOLVED_VERSION=\"${MATCHED_VERSION}\"\n            echo -e \"Version is valid. Using version: ${RESOLVED_VERSION}\"\n        else\n            echo -e \"Version '${VELOCITY_VERSION}' not found, falling back to latest version: ${LATEST_VERSION}\"\n            RESOLVED_VERSION=\"${LATEST_VERSION}\"\n        fi\n    fi\n\n    echo -e \"Fetching build information for ${PROJECT} version ${RESOLVED_VERSION}...\"\n    BUILDS_URL=\"${API_BASE}/versions/${RESOLVED_VERSION}/builds\"\n    if ! curl -sSL -H \"User-Agent: ${USER_AGENT}\" \"${BUILDS_URL}\" -o \"${TMP_DIR}/builds.json\"; then\n        echo -e \"ERROR: Failed to connect to builds endpoint (${BUILDS_URL})\"\n        exit 1\n    fi\n\n    if [ ! -s \"${TMP_DIR}/builds.json\" ] || jq -e '.ok == false' \"${TMP_DIR}/builds.json\" >/dev/null 2>&1; then\n        echo -e \"ERROR: Failed to fetch builds for version ${RESOLVED_VERSION}\"\n        exit 1\n    fi\n\n    BUILD_FILTER='(map(select((.id | tostring) == $B)) | .[0]) // .[0]'\n\n    RESOLVED_BUILD=$(jq -r --arg B \"${BUILD_NUMBER}\" \"${BUILD_FILTER} | .id // empty\" \"${TMP_DIR}/builds.json\")\n    DOWNLOAD_URL=$(jq -r --arg B \"${BUILD_NUMBER}\" \"${BUILD_FILTER} | .downloads | to_entries[0].value.url // empty\" \"${TMP_DIR}/builds.json\")\n    JAR_NAME=$(jq -r --arg B \"${BUILD_NUMBER}\" \"${BUILD_FILTER} | .downloads | to_entries[0].value.name // empty\" \"${TMP_DIR}/builds.json\")\n    CHECKSUM_SHA256=$(jq -r --arg B \"${BUILD_NUMBER}\" \"${BUILD_FILTER} | .downloads | to_entries[0].value.checksums.sha256 // empty\" \"${TMP_DIR}/builds.json\")\n\n    if [ -z \"${DOWNLOAD_URL}\" ]; then\n        echo -e \"ERROR: Could not resolve download URL for ${PROJECT} ${RESOLVED_VERSION} build ${RESOLVED_BUILD}\"\n        exit 1\n    fi\n\n    echo -e \"Version being downloaded:\"\n    echo -e \"Velocity Version:  ${RESOLVED_VERSION}\"\n    echo -e \"Build:             ${RESOLVED_BUILD}\"\n    echo -e \"JAR Name of Build: ${JAR_NAME}\"\nfi\n\necho -e \"Downloading ${JAR_NAME:-Velocity JAR}...\"\nif [ -f \"${SERVER_JARFILE}\" ]; then\n    echo -e \"Backing up existing ${SERVER_JARFILE} to ${SERVER_JARFILE}.old\"\n    mv \"${SERVER_JARFILE}\" \"${SERVER_JARFILE}.old\"\nfi\n\necho -e \"Running: curl -sSL -H 'User-Agent: ${USER_AGENT}' -o ${SERVER_JARFILE} ${DOWNLOAD_URL}\"\nif ! curl -sSL -H \"User-Agent: ${USER_AGENT}\" -o \"${SERVER_JARFILE}\" \"${DOWNLOAD_URL}\"; then\n    echo -e \"ERROR: Failed to download server jar file!\"\n    exit 1\nfi\n\nif [ -n \"${CHECKSUM_SHA256}\" ] && command -v sha256sum >/dev/null 2>&1; then\n    echo -e \"Verifying SHA256 checksum...\"\n    DOWNLOADED_SHA256=$(sha256sum \"${SERVER_JARFILE}\" | awk '{print $1}')\n    if [ \"${DOWNLOADED_SHA256}\" = \"${CHECKSUM_SHA256}\" ]; then\n        echo -e \"Checksum verification succeeded!\"\n    else\n        echo -e \"WARNING: Checksum mismatch! Expected ${CHECKSUM_SHA256}, got ${DOWNLOADED_SHA256}\"\n    fi\nfi\n\nif [ -f velocity.toml ]; then\n    echo -e \"velocity config file exists\"\nelse\n    echo -e \"downloading velocity config file template...\"\n    curl -sSL https://raw.githubusercontent.com/parkervcp/eggs/master/game_eggs/minecraft/proxy/java/velocity/velocity.toml -o velocity.toml\nfi\n\nif [ -f forwarding.secret ]; then\n    echo -e \"velocity forwarding secret file already exists\"\nelse\n    echo -e \"creating forwarding secret file...\"\n    touch forwarding.secret\n    date +%s | sha256sum | base64 | head -c 12 > forwarding.secret\nfi\n\necho -e \"install complete\"\n",
+            "container": "ghcr.io/parkervcp/installers:alpine",
+            "entrypoint": "ash"
+        }
+    },
+    "variables": [
+        {
+            "name": "Velocity Version",
+            "description": "The Velocity Proxy version to download.\r\n\r\nSet to 'latest' to download the last stable build.",
+            "env_variable": "VELOCITY_VERSION",
+            "default_value": "latest",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:20",
+            "field_type": "text"
+        },
+        {
+            "name": "Build Number",
+            "description": "The build number for the velocity release.\r\n\r\nLeave at latest to always get the latest version. Invalid versions will default to latest.",
+            "env_variable": "BUILD_NUMBER",
+            "default_value": "latest",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:20",
+            "field_type": "text"
+        },
+        {
+            "name": "Enable Enhanced Modpack Flags",
+            "description": "Toggle enhanced JVM flags for Velocity, including max-known-packs and packet decoding logging (highly recommended for large modpacks like ATM 10 / Craftoria).\r\nSet to 1 or true to enable.",
+            "env_variable": "ENHANCED_FLAGS",
+            "default_value": "1",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|boolean",
+            "field_type": "text"
+        },
+        {
+            "name": "Max Known Packs",
+            "description": "Maximum known packs limit (-Dvelocity.max-known-packs). Required for modern modpacks with many registry entries to prevent client disconnects.",
+            "env_variable": "MAX_KNOWN_PACKS",
+            "default_value": "1150",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|numeric|min:64|max:65535",
+            "field_type": "text"
+        },
+        {
+            "name": "Packet Decode Logging",
+            "description": "Enable verbose packet decode logging (-Dvelocity.packet-decode-logging=true/false) to troubleshoot packet decode errors.",
+            "env_variable": "PACKET_DECODE_LOGGING",
+            "default_value": "true",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|in:true,false",
+            "field_type": "text"
+        },
+        {
+            "name": "Additional JVM Flags",
+            "description": "Additional JVM arguments or Java system properties to append to the startup command.",
+            "env_variable": "EXTRA_FLAGS",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "nullable|string",
+            "field_type": "text"
+        },
+        {
+            "name": "Server Jar File",
+            "description": "Server Jarfile, by default this is set to 'velocity.jar'.\r\nSet it to otherwise if you wish to have a different jarfile name.",
+            "env_variable": "SERVER_JARFILE",
+            "default_value": "velocity.jar",
+            "user_viewable": true,
+            "user_editable": false,
+            "rules": "required|string|max:32|regex:/^([\\w\\d._-]+)(\\.jar)$/",
+            "field_type": "text"
+        },
+        {
+            "name": "Download Path",
+            "description": "A URL to use to download a server.jar rather than the ones in the install script. This is not user viewable.",
+            "env_variable": "DL_PATH",
+            "default_value": "",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": "nullable|string",
+            "field_type": "text"
+        }
+    ]
+}
